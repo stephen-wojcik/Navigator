@@ -29,9 +29,7 @@ public struct RootCoordinatedScreenView<Content: View>: View {
                         set: { _ in navigator.stopPresenting() }
                     ),
                     onDismiss: { navigator.onPresentedDismissed() },
-                    content: {
-                        navigator.presentationView
-                    }
+                    content: navigator.presentationView
                 )
 #if !os(macOS)
                 .fullScreenCover(
@@ -40,13 +38,11 @@ public struct RootCoordinatedScreenView<Content: View>: View {
                         set: { _ in navigator.stopPresenting() }
                     ),
                     onDismiss: { navigator.onPresentedDismissed() },
-                    content: {
-                        navigator.presentationView
-                    }
+                    content: navigator.presentationView
                 )
 #endif
                 .navigationDestination(for: Destination.self) { destination in
-                    navigator.pushedViews[destination]
+                    navigator.pushedViews[destination]?()
                 }
         }
     }
@@ -73,9 +69,7 @@ struct ChildCoordinatedScreenView<Content: View>: View {
                     set: { _ in navigator.stopPresenting() }
                 ),
                 onDismiss: { navigator.onPresentedDismissed() },
-                content: {
-                    navigator.presentationView
-                }
+                content: navigator.presentationView
             )
 #if !os(macOS)
             .fullScreenCover(
@@ -84,9 +78,7 @@ struct ChildCoordinatedScreenView<Content: View>: View {
                     set: { _ in navigator.stopPresenting() }
                 ),
                 onDismiss: { navigator.onPresentedDismissed() },
-                content: {
-                    navigator.presentationView
-                }
+                content: navigator.presentationView
             )
 #endif
     }

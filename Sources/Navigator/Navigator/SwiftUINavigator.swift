@@ -16,8 +16,8 @@ final public class SwiftUINavigator: ObservableObject, Navigator {
     @Published @MainActor private(set) var presentation: PresentationStyle?
     @Published @MainActor var navigationPath: [Destination] = []
     
-    @MainActor private(set) var presentationView: AnyView = noOpView
-    @MainActor private(set) var pushedViews: [Destination: AnyView] = [:]
+    @MainActor private(set) var presentationView: () -> AnyView = { noOpView }
+    @MainActor private(set) var pushedViews: [Destination: () -> AnyView] = [:]
     
     public var onPresentedDismissed: @MainActor () -> Void = {}
     
@@ -66,27 +66,29 @@ final public class SwiftUINavigator: ObservableObject, Navigator {
 public extension SwiftUINavigator {
     
     @MainActor
-    func present(destination makeView: (Navigator) -> some View) {
+    func present(destination makeView: @escaping (Navigator) -> some View) {
         present(destination: makeView, as: .sheet)
     }
     
     @MainActor
     func present(
-        destination makeView: (Navigator) -> some View,
+        destination makeView: @escaping (Navigator) -> some View,
         as presentation: PresentationStyle
     ) {
         let childNavigator = SwiftUINavigator(navigationContext: .presented(coordinatingNavigator: self))
-        presentationView = AnyView(
-            makeView(childNavigator)
-                .presented(navigator: childNavigator)
-        )
+        presentationView = {
+            AnyView(
+                makeView(childNavigator)
+                    .presented(navigator: childNavigator)
+            )
+        }
         self.presentation = presentation
     }
     
     @MainActor
     func stopPresenting() {
         presentation = nil
-        presentationView = Self.noOpView
+        presentationView = { Self.noOpView }
     }
     
     @MainActor
@@ -104,7 +106,7 @@ public extension SwiftUINavigator {
     
     @discardableResult
     @MainActor
-    func push(destination makeView: (Navigator) -> some View) -> Destination {
+    func push(destination makeView: @escaping (Navigator) -> some View) -> Destination {
         let destination = Destination()
         let childNavigator = SwiftUINavigator(
             navigationContext: .pushed(
@@ -114,10 +116,12 @@ public extension SwiftUINavigator {
         )
         
         let root = findRootNavigator()
-        root.pushedViews[destination] = AnyView(
-            makeView(childNavigator)
-                .pushed(navigator: childNavigator)
-        )
+        root.pushedViews[destination] = {
+            AnyView(
+                makeView(childNavigator)
+                    .pushed(navigator: childNavigator)
+            )
+        }
         root.navigationPath.append(destination)
         
         return destination

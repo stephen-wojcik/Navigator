@@ -14,12 +14,12 @@ public protocol Navigator: AnyObject {
     @MainActor func denavigate()
     @MainActor func rootNavigator() -> Navigator
     
-    @MainActor func present(destination makeView: (Navigator) -> some View, as presentation: PresentationStyle)
-    @MainActor func present(destination makeView: (Navigator) -> some View)
+    @MainActor func present(destination makeView: @escaping (Navigator) -> some View, as presentation: PresentationStyle)
+    @MainActor func present(destination makeView: @escaping (Navigator) -> some View)
     @MainActor func stopPresenting()
     @MainActor func dismiss()
     
-    @discardableResult @MainActor func push(destination makeView: (Navigator) -> some View) -> Destination
+    @discardableResult @MainActor func push(destination makeView: @escaping (Navigator) -> some View) -> Destination
     @MainActor func popToRoot()
     @MainActor func pop(removingLast: Int)
     @MainActor func pop()
