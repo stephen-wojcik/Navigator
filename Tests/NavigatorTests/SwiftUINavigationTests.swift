@@ -16,7 +16,7 @@ final class SwiftUINavigationTests: XCTestCase {
         // GIVEN
         let rootNavigator = SwiftUINavigator.makeRoot()
         var presentedNavigator: Navigator?
-        rootNavigator.present { navigator in
+        rootNavigator.presentAndMakeView { navigator in
             presentedNavigator = navigator
             return EmptyView()
         }
@@ -31,7 +31,7 @@ final class SwiftUINavigationTests: XCTestCase {
         var pushedNavigator: Navigator?
         var pushingNavigator: SwiftUINavigator? = rootNavigator
         for _ in 0..<10 {
-            pushingNavigator?.push { navigator in
+            _ = pushingNavigator?.pushAndMakeView { navigator in
                 pushedNavigator = navigator
                 pushingNavigator = navigator as? SwiftUINavigator
                 return EmptyView()
@@ -46,7 +46,7 @@ final class SwiftUINavigationTests: XCTestCase {
         // GIVEN
         let rootNavigator = SwiftUINavigator.makeRoot()
         var presentedNavigator: Navigator?
-        rootNavigator.present { navigator in
+        rootNavigator.presentAndMakeView { navigator in
             presentedNavigator = navigator
             return EmptyView()
         }
@@ -66,7 +66,7 @@ final class SwiftUINavigationTests: XCTestCase {
         var pushingNavigator: SwiftUINavigator? = rootNavigator
         for _ in 0..<10 {
             destinationIds.append(
-                pushingNavigator?.push { navigator in
+                pushingNavigator?.pushAndMakeView { navigator in
                     navigators += [navigator]
                     pushingNavigator = navigator as? SwiftUINavigator
                     return EmptyView()

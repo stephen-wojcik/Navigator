@@ -9,7 +9,7 @@ final class SwiftUINavigatorPushingAndPoppingTests: XCTestCase {
         let rootNavigator = SwiftUINavigator.makeRoot()
         
         // WHEN
-        let destinationId = rootNavigator.push { _ in EmptyView() }
+        let destinationId = rootNavigator.pushAndMakeView { _ in EmptyView() }
         
         // THEN
         XCTAssertEqual(rootNavigator.navigationPath, [destinationId])
@@ -23,7 +23,7 @@ final class SwiftUINavigatorPushingAndPoppingTests: XCTestCase {
         
         // WHEN
         var pushedNavigator: Navigator?
-        let destinationId = rootNavigator.push { navigator in
+        let destinationId = rootNavigator.pushAndMakeView { navigator in
             pushedNavigator = navigator
             return EmptyView()
         }
@@ -38,7 +38,7 @@ final class SwiftUINavigatorPushingAndPoppingTests: XCTestCase {
         // GIVEN
         let rootNavigator = SwiftUINavigator.makeRoot()
         var pushedNavigator: Navigator?
-        let firstDestinationId = rootNavigator.push { navigator in
+        let firstDestinationId = rootNavigator.pushAndMakeView { navigator in
             pushedNavigator = navigator
             return EmptyView()
         }
@@ -62,7 +62,7 @@ final class SwiftUINavigatorPushingAndPoppingTests: XCTestCase {
         // WHEN
         for _ in 0..<numberOfSubsequentPushes {
             destinationIds.append(
-                pushingNavigator?.push { navigator in
+                pushingNavigator?.pushAndMakeView { navigator in
                     pushingNavigator = navigator as? SwiftUINavigator
                     return EmptyView()
                 }
@@ -80,7 +80,7 @@ final class SwiftUINavigatorPushingAndPoppingTests: XCTestCase {
         let rootNavigator = SwiftUINavigator.makeRoot()
         var pushingNavigator: SwiftUINavigator? = rootNavigator
         for _ in 0..<10 {
-            pushingNavigator?.push { navigator in
+            _ = pushingNavigator?.pushAndMakeView { navigator in
                 pushingNavigator = navigator as? SwiftUINavigator
                 return EmptyView()
             }
@@ -97,10 +97,10 @@ final class SwiftUINavigatorPushingAndPoppingTests: XCTestCase {
     @MainActor func test_popToRoot_viaChild_removesAllPushedNavigatorsFromRoot() async throws {
         // GIVEN
         let rootNavigator = SwiftUINavigator.makeRoot()
-        var lastPushedNavigator: Navigator?
+        var lastPushedNavigator: SwiftUINavigator?
         for _ in 0..<10 {
-            lastPushedNavigator?.push { navigator in
-                lastPushedNavigator = navigator
+            _ = lastPushedNavigator?.pushAndMakeView { navigator in
+                lastPushedNavigator = navigator as? SwiftUINavigator
                 return EmptyView()
             }
         }
@@ -120,7 +120,7 @@ final class SwiftUINavigatorPushingAndPoppingTests: XCTestCase {
         var pushingNavigator: SwiftUINavigator? = rootNavigator
         for _ in 0..<10 {
             destinationIds.append(
-                pushingNavigator?.push { navigator in
+                pushingNavigator?.pushAndMakeView { navigator in
                     pushingNavigator = navigator as? SwiftUINavigator
                     return EmptyView()
                 }
@@ -143,7 +143,7 @@ final class SwiftUINavigatorPushingAndPoppingTests: XCTestCase {
         var pushingNavigator: SwiftUINavigator? = rootNavigator
         for _ in 0..<10 {
             destinationIds.append(
-                pushingNavigator?.push { navigator in
+                pushingNavigator?.pushAndMakeView { navigator in
                     lastPushedNavigator = navigator
                     pushingNavigator = navigator as? SwiftUINavigator
                     return EmptyView()
@@ -167,7 +167,7 @@ final class SwiftUINavigatorPushingAndPoppingTests: XCTestCase {
         var pushingNavigator: SwiftUINavigator? = rootNavigator
         for _ in 0..<10 {
             destinationIds.append(
-                pushingNavigator?.push { navigator in
+                pushingNavigator?.pushAndMakeView { navigator in
                     navigators += [navigator]
                     pushingNavigator = navigator as? SwiftUINavigator
                     return EmptyView()
@@ -193,7 +193,7 @@ final class SwiftUINavigatorPushingAndPoppingTests: XCTestCase {
         var pushingNavigator: SwiftUINavigator? = rootNavigator
         for _ in 0..<10 {
             destinationIds.append(
-                pushingNavigator?.push { navigator in
+                pushingNavigator?.pushAndMakeView { navigator in
                     navigators += [navigator]
                     pushingNavigator = navigator as? SwiftUINavigator
                     return EmptyView()
@@ -219,7 +219,7 @@ final class SwiftUINavigatorPushingAndPoppingTests: XCTestCase {
         var pushingNavigator: SwiftUINavigator? = rootNavigator
         for _ in 0..<10 {
             destinationIds.append(
-                pushingNavigator?.push { navigator in
+                pushingNavigator?.pushAndMakeView { navigator in
                     navigators += [navigator]
                     pushingNavigator = navigator as? SwiftUINavigator
                     return EmptyView()
@@ -245,7 +245,7 @@ final class SwiftUINavigatorPushingAndPoppingTests: XCTestCase {
         var pushingNavigator: SwiftUINavigator? = rootNavigator
         for _ in 0..<10 {
             destinationIds.append(
-                pushingNavigator?.push { navigator in
+                pushingNavigator?.pushAndMakeView { navigator in
                     navigators += [navigator]
                     pushingNavigator = navigator as? SwiftUINavigator
                     return EmptyView()

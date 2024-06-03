@@ -9,7 +9,7 @@ final class SwiftUINavigatorPresentingAndDismissingTests: XCTestCase {
         let rootNavigator = SwiftUINavigator.makeRoot()
         
         // WHEN
-        rootNavigator.present { _ in EmptyView() }
+        rootNavigator.presentAndMakeView { _ in EmptyView() }
         
         // THEN
         XCTAssertEqual(rootNavigator.presentation, .sheet)
@@ -21,7 +21,7 @@ final class SwiftUINavigatorPresentingAndDismissingTests: XCTestCase {
         let rootNavigator = SwiftUINavigator.makeRoot()
         
         // WHEN
-        rootNavigator.present(destination: { _ in EmptyView() }, as: .fullScreenCover)
+        rootNavigator.presentAndMakeView(destination: { _ in EmptyView() }, as: .fullScreenCover)
         
         // THEN
         XCTAssertEqual(rootNavigator.presentation, .fullScreenCover)
@@ -33,7 +33,7 @@ final class SwiftUINavigatorPresentingAndDismissingTests: XCTestCase {
         
         // WHEN
         var presentedNavigator: Navigator?
-        rootNavigator.present { navigator in
+        rootNavigator.presentAndMakeView { navigator in
             presentedNavigator = navigator
             return EmptyView()
         }
@@ -47,7 +47,7 @@ final class SwiftUINavigatorPresentingAndDismissingTests: XCTestCase {
     @MainActor func test_stopPresenting_resetsRootStateCorrectly() async throws {
         // GIVEN
         let rootNavigator = SwiftUINavigator.makeRoot()
-        rootNavigator.present { _ in EmptyView() }
+        rootNavigator.presentAndMakeView { _ in EmptyView() }
         
         // WHEN
         rootNavigator.stopPresenting()
@@ -60,7 +60,7 @@ final class SwiftUINavigatorPresentingAndDismissingTests: XCTestCase {
         // GIVEN
         let rootNavigator = SwiftUINavigator.makeRoot()
         var presentedNavigator: Navigator?
-        rootNavigator.present { navigator in
+        rootNavigator.presentAndMakeView { navigator in
             presentedNavigator = navigator
             return EmptyView()
         }
