@@ -28,8 +28,22 @@ dependencies: [
 * Don't forget to attach the navigator to the view via `YOUR_VIEW.root(navigator: navigator)`
 * Any subsequent navigation from your view can be triggered from your ViewModel, for example:
 ```swift
-viewModel.onNextPageTapped = {
-  navigator.push(destination: NextPageViewFactory().make(navigator:))
+class NextPageViewFactory {
+    func make(navigator: Navigator) -> some View {
+        return NextPageView(
+            viewModel: NextPageViewModel(
+                onNextPageTapped: {
+                    navigator.push(destination: NextPageViewFactory().make(navigator:))
+                },
+                onSettingsTapped: {
+                    navigator.present(destination: SettingsViewFactory().make(navigator:))
+                },
+                onExitTapped: {
+                    navigator.popToRoot()
+                }
+            )
+        )
+    }
 }
 ```
 * Subsequent views will not need to create their own navigator, nor will they need to attach it to the view - all you need to do is provide a `make` method which takes a `Navigator` and the library will handle this dance for you
