@@ -15,6 +15,21 @@ class SettingsViewModel: ObservableObject {
     var onPresentSettingTapped: @MainActor (_ setting: String) -> Void = { _ in }
     var onCloseTapped: @MainActor () -> Void = {}
     
+    init(
+        onPushSettingTapped: @escaping @MainActor (_: String) -> Void,
+        onPresentSettingTapped: @escaping @MainActor (_: String) -> Void,
+        onCloseTapped: @escaping @MainActor () -> Void
+    ) {
+        self.onPushSettingTapped = onPushSettingTapped
+        self.onPresentSettingTapped = onPresentSettingTapped
+        self.onCloseTapped = onCloseTapped
+        print("> SettingsViewModel.init")
+    }
+    
+    deinit {
+        print("< SettingsViewModel.deinit")
+    }
+    
     @MainActor func didTapSetting(_ setting: String) {
         if setting == "Pushed" {
             onPushSettingTapped(setting)

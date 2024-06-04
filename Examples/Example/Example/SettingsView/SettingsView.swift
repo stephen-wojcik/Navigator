@@ -9,7 +9,11 @@ import SwiftUI
 
 struct SettingsView: View {
     
-    @ObservedObject var viewModel: SettingsViewModel
+    @StateObject var viewModel: SettingsViewModel
+    
+    init(viewModel: @escaping @autoclosure () -> SettingsViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel())
+    }
     
     var body: some View {
         List(viewModel.settings, id: \.self) { setting in

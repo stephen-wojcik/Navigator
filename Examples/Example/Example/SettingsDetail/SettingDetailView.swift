@@ -9,7 +9,11 @@ import SwiftUI
 
 struct SettingDetailView: View {
     
-    @ObservedObject var viewModel: SettingDetailViewModel
+    @StateObject var viewModel: SettingDetailViewModel
+    
+    init(viewModel: @escaping @autoclosure () -> SettingDetailViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel())
+    }
     
     var body: some View {
         Button {

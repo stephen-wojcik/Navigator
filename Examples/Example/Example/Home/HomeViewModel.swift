@@ -12,6 +12,19 @@ class HomeViewModel: ObservableObject {
     var onNextPageTapped: @MainActor () -> Void = {}
     var onSettingsTapped: @MainActor () -> Void = {}
     
+    init(
+        onNextPageTapped: @escaping @MainActor () -> Void,
+        onSettingsTapped: @escaping @MainActor () -> Void
+    ) {
+        self.onNextPageTapped = onNextPageTapped
+        self.onSettingsTapped = onSettingsTapped
+        print("> HomeViewModel.init")
+    }
+    
+    deinit {
+        print("< HomeViewModel.deinit")
+    }
+    
     @MainActor func didTapNextPage() {
         onNextPageTapped()
     }

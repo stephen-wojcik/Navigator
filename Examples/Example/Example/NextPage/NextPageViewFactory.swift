@@ -10,20 +10,18 @@ import Navigator
 
 class NextPageViewFactory {
     func make(navigator: Navigator) -> some View {
-        let viewModel = NextPageViewModel()
-        
-        viewModel.onNextPageTapped = {
-            navigator.push(destination: NextPageViewFactory().make(navigator:))
-        }
-        
-        viewModel.onSettingsTapped = {
-            navigator.present(destination: SettingsViewFactory().make(navigator:))
-        }
-        
-        viewModel.onExitTapped = {
-            navigator.popToRoot()
-        }
-        
-        return NextPageView(viewModel: viewModel)
+        return NextPageView(
+            viewModel: NextPageViewModel(
+                onNextPageTapped: {
+                    navigator.push(destination: NextPageViewFactory().make(navigator:))
+                },
+                onSettingsTapped: {
+                    navigator.present(destination: SettingsViewFactory().make(navigator:))
+                },
+                onExitTapped: {
+                    navigator.popToRoot()
+                }
+            )
+        )
     }
 }

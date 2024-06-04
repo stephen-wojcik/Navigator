@@ -9,10 +9,20 @@ import SwiftUI
 
 struct NextPageView: View {
     
-    @ObservedObject var viewModel: NextPageViewModel
+    @StateObject var viewModel: NextPageViewModel
+    
+    init(viewModel: @autoclosure @escaping () -> NextPageViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel())
+    }
     
     var body: some View {
         List {
+            Button {
+                viewModel.didTapIncrement()
+            } label: {
+                Text("Counter value: \(viewModel.counterValue)")
+            }
+            
             Button {
                 viewModel.didTapNextPage()
             } label: {

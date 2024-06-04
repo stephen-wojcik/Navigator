@@ -11,17 +11,16 @@ import Navigator
 class HomeViewFactory {
     func make() -> RootCoordinatedScreenView<HomeView> {
         let navigator = SwiftUINavigator.makeRoot()
-        let viewModel = HomeViewModel()
-        
-        viewModel.onNextPageTapped = {
-            navigator.push(destination: NextPageViewFactory().make(navigator:))
-        }
-        
-        viewModel.onSettingsTapped = {
-            navigator.present(destination: SettingsViewFactory().make(navigator:))
-        }
-        
-        return HomeView(viewModel: viewModel)
-            .root(navigator: navigator)
+        return HomeView(
+            viewModel: HomeViewModel(
+                onNextPageTapped: {
+                    navigator.push(destination: NextPageViewFactory().make(navigator:))
+                },
+                onSettingsTapped: {
+                    navigator.present(destination: SettingsViewFactory().make(navigator:))
+                }
+            )
+        )
+        .root(navigator: navigator)
     }
 }

@@ -10,12 +10,13 @@ import Navigator
 
 class SettingDetailViewFactory {
     func make(navigator: Navigator, setting: String) -> some View {
-        let viewModel = SettingDetailViewModel(setting: setting)
-        
-        viewModel.onDoneTapped = {
-            navigator.denavigate()
-        }
-        
-        return SettingDetailView(viewModel: viewModel)
+        return SettingDetailView(
+            viewModel: SettingDetailViewModel(
+                setting: setting, 
+                onDoneTapped: {
+                    navigator.denavigate()
+                }
+            )
+        )
     }
 }

@@ -10,32 +10,29 @@ import Navigator
 
 class SettingsViewFactory {
     func make(navigator: Navigator) -> some View {
-        let viewModel = SettingsViewModel()
-        
-        viewModel.onPushSettingTapped = { setting in
-            navigator.push { newChildNavigator in
-                return SettingDetailViewFactory()
-                    .make(
-                        navigator: newChildNavigator,
-                        setting: setting
-                    )
-            }
-        }
-        
-        viewModel.onPresentSettingTapped = { setting in
-            navigator.present { newChildNavigator in
-                return SettingDetailViewFactory()
-                    .make(
-                        navigator: newChildNavigator,
-                        setting: setting
-                    )
-            }
-        }
-        
-        viewModel.onCloseTapped = {
-            navigator.denavigate()
-        }
-        
-        return SettingsView(viewModel: viewModel)
+        return SettingsView(
+            viewModel: SettingsViewModel(
+                onPushSettingTapped: { setting in
+                    navigator.push { newChildNavigator in
+                        return SettingDetailViewFactory()
+                            .make(
+                                navigator: newChildNavigator,
+                                setting: setting
+                            )
+                    }
+                },
+                onPresentSettingTapped: { setting in
+                    navigator.present { newChildNavigator in
+                        return SettingsViewFactory()
+                            .make(
+                                navigator: newChildNavigator
+                            )
+                    }
+                },
+                onCloseTapped: {
+                    navigator.denavigate()
+                }
+            )
+        )
     }
 }
